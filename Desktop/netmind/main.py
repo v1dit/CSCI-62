@@ -205,6 +205,7 @@ class DemoRunRequest(BaseModel):
     resume_text: str = ""
     context: str = "networking"
     tone: str = "professional"
+    send: bool = False
 
 
 @app.post("/demo/run")
@@ -217,12 +218,27 @@ async def demo_run(payload: DemoRunRequest):
         email_result = await find_email(name, company)
         draft = await generate_email(profile, payload.resume_text, payload.context, payload.tone)
 
+        send_result = None
+        if payload.send:
+            # Ensure we have an email to send
+            to_addr = email_result.get("email")
+            if to_addr:
+                send_result = gmail_send(
+                    to=to_addr,
+                    subject=draft.get("subject", "Quick question"),
+                    body=draft.get("body", "")
+                )
+            else:
+                send_result = {"error": "no recipient email available"}
+
         return {
             "profile": profile,
             "email": email_result.get("email"),
             "confidence": email_result.get("confidence"),
             "sources": email_result.get("sources", []),
             "draft": draft,
+            "sent": bool(payload.send),
+            "send_result": send_result,
         }
     except Exception as e:
         return {"error": str(e)}
