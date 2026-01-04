@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os, requests
 from dotenv import load_dotenv
+from linkedin_parser import fetch_linkedin_profile
 load_dotenv()
 
 app = FastAPI(
@@ -162,5 +163,18 @@ def send_email(email: dict):
     except Exception:
         pass
     return {"ok": True, "message": "email queued (mock)", "to": to, "subject": subject}
+
+
+class LinkedInRequest(BaseModel):
+    url: str
+
+
+@app.post("/parse-profile")
+async def parse_profile(payload: LinkedInRequest):
+    try:
+        profile = await fetch_linkedin_profile(payload.url)
+        return profile
+    except Exception as e:
+        return {"error": str(e)}
 
 
