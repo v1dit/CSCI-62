@@ -1,3 +1,27 @@
+"""
+Networking Agent API - main orchestrator
+
+This module exposes the FastAPI application and wires the primary endpoints used by the
+networking-agent backend. The high-level request flow is:
+
+1. /parse-profile   -> accepts a LinkedIn URL, returns a normalized profile JSON using Proxycurl
+2. /find-email      -> accepts name + company, returns a best-guess professional email (Hunter/Clearbit)
+3. /generate-email  -> accepts profile + resume text, returns a generated subject/body via LLM
+4. /demo/run        -> orchestrates the above steps end-to-end and optionally sends an email via Gmail
+5. /gmail/auth      -> starts OAuth consent flow for Gmail
+6. /gmail/callback  -> OAuth callback which exchanges code for tokens
+7. /send-email      -> sends an email using stored Gmail OAuth tokens
+
+Notes:
+- Environment variables (see .env.example) are used for API keys and OAuth client IDs/secrets.
+- OAuth tokens are persisted locally in gmail_tokens.json for now (do NOT commit this file).
+- The demo orchestrator will return draft warnings when the LLM output contains phrases that may
+  indicate potential hallucinations.
+
+This file focuses on routing and orchestration; parsing, email finding, and LLM logic live in
+`linkedin_parser.py`, `email_finder.py`, and `ai_writer.py` respectively.
+"""
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
