@@ -1,0 +1,19 @@
+# OS files
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+.env.*
+
+# Logs
+*.log
+
+# Tokens / credentials
+gmail_tokens.json
+
+# IDE/editor
+.vscode/
+*.swp
