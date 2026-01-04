@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 from linkedin_parser import fetch_linkedin_profile
 from email_finder import find_email
 from ai_writer import generate_email
+from gmail_auth import build_consent_url, exchange_code_for_tokens
+from fastapi.responses import RedirectResponse
 
 
 load_dotenv()
@@ -238,5 +240,25 @@ async def demo_run(payload: DemoRunRequest):
         }
     except Exception as e:
         return {"error": str(e)}
+
+
+@app.get('/gmail/auth')
+def gmail_auth():
+    try:
+        url = build_consent_url()
+        return RedirectResponse(url)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get('/gmail/callback')
+async def gmail_callback(code: str = None, state: str = None):
+    if not code:
+        raise HTTPException(status_code=400, detail='missing code')
+    try:
+        tokens = await exchange_code_for_tokens(code)
+        return {"ok": True, "tokens": tokens}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
