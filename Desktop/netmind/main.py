@@ -8,6 +8,7 @@ from email_finder import find_email
 from ai_writer import generate_email
 from gmail_auth import build_consent_url, exchange_code_for_tokens
 from fastapi.responses import RedirectResponse
+from gmail_sender import send_email as gmail_send
 
 
 load_dotenv()
@@ -156,21 +157,6 @@ def compose_email(data: dict):
     return {"email": email_text, "raw": resp}
 
 
-@app.post('/send_email')
-def send_email(email: dict):
-    to = email.get('to')
-    subject = email.get('subject')
-    body_text = email.get('body') or email.get('email') or email.get('message')
-    if not to or not subject or not body_text:
-        return {"ok": False, "error": "missing to/subject/body"}
-    try:
-        with open('sent_emails.log', 'a') as f:
-            f.write(f"TO: {to}\nSUBJECT: {subject}\nBODY:\n{body_text}\n---\n")
-    except Exception:
-        pass
-    return {"ok": True, "message": "email queued (mock)", "to": to, "subject": subject}
-
-
 class LinkedInRequest(BaseModel):
     url: str
 
@@ -260,5 +246,24 @@ async def gmail_callback(code: str = None, state: str = None):
         return {"ok": True, "tokens": tokens}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+class SendEmailRequest(BaseModel):
+    to: str
+    subject: str
+    body: str
+
+
+@app.post("/send-email")
+def send_email_route(payload: SendEmailRequest):
+    try:
+        result = gmail_send(
+            to=payload.to,
+            subject=payload.subject,
+            body=payload.body
+        )
+        return result
+    except Exception as e:
+        return {"error": str(e)}
 
 
