@@ -4,6 +4,9 @@ from pydantic import BaseModel
 import os, requests
 from dotenv import load_dotenv
 from linkedin_parser import fetch_linkedin_profile
+from email_finder import find_email
+
+
 load_dotenv()
 
 app = FastAPI(
@@ -174,6 +177,20 @@ async def parse_profile(payload: LinkedInRequest):
     try:
         profile = await fetch_linkedin_profile(payload.url)
         return profile
+    except Exception as e:
+        return {"error": str(e)}
+
+
+class FindEmailRequest(BaseModel):
+    name: str
+    company: str
+
+
+@app.post("/find-email")
+async def find_email_endpoint(payload: FindEmailRequest):
+    try:
+        result = await find_email(payload.name, payload.company)
+        return result
     except Exception as e:
         return {"error": str(e)}
 
