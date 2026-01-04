@@ -5,6 +5,7 @@ import os, requests
 from dotenv import load_dotenv
 from linkedin_parser import fetch_linkedin_profile
 from email_finder import find_email
+from ai_writer import generate_email
 
 
 load_dotenv()
@@ -191,6 +192,22 @@ async def find_email_endpoint(payload: FindEmailRequest):
     try:
         result = await find_email(payload.name, payload.company)
         return result
+    except Exception as e:
+        return {"error": str(e)}
+
+
+class GenerateEmailRequest(BaseModel):
+    profile: dict
+    resume_text: str = ""
+    context: str = "networking"
+    tone: str = "professional"
+
+
+@app.post("/generate-email")
+async def generate_email_endpoint(payload: GenerateEmailRequest):
+    try:
+        out = await generate_email(payload.profile, payload.resume_text, payload.context, payload.tone)
+        return out
     except Exception as e:
         return {"error": str(e)}
 
