@@ -212,3 +212,31 @@ async def generate_email_endpoint(payload: GenerateEmailRequest):
         return {"error": str(e)}
 
 
+class DemoRunRequest(BaseModel):
+    linkedin_url: str
+    resume_text: str = ""
+    context: str = "networking"
+    tone: str = "professional"
+
+
+@app.post("/demo/run")
+async def demo_run(payload: DemoRunRequest):
+    try:
+        profile = await fetch_linkedin_profile(payload.linkedin_url)
+        name = profile.get("name") or profile.get("full_name") or ""
+        company = profile.get("company") or ""
+
+        email_result = await find_email(name, company)
+        draft = await generate_email(profile, payload.resume_text, payload.context, payload.tone)
+
+        return {
+            "profile": profile,
+            "email": email_result.get("email"),
+            "confidence": email_result.get("confidence"),
+            "sources": email_result.get("sources", []),
+            "draft": draft,
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+
