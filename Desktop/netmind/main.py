@@ -234,14 +234,41 @@ class DemoRunRequest(BaseModel):
 
 @app.post("/demo/run")
 async def demo_run(payload: DemoRunRequest):
+    """
+    Demo run orchestrator — end-to-end pipeline.
+
+    This endpoint runs the following stages sequentially:
+      1. Parse the LinkedIn profile URL into a normalized `profile` JSON using Proxycurl.
+      2. Derive a best-guess professional email for the person using name + company (Hunter/Clearbit).
+      3. Generate a short, personalized email draft (subject + body) via the LLM using provided profile
+         and resume snippets.
+      4. Optionally send the generated draft via Gmail if `payload.send` is True.
+
+    The function returns a JSON object containing:
+      - profile: normalized LinkedIn profile
+      - email: best-guess email address (or null)
+      - confidence: numerical confidence for the email guess when available
+      - sources: list of sources used for the email discovery
+      - draft: the generated email draft (subject/body), may include `warnings` if validation flagged issues
+      - sent: boolean indicating whether the system attempted to send the email
+      - send_result: result from the Gmail sender when sending was requested (null otherwise)
+
+    Important: this docstring is for documentation only and does not change behavior. Upstream errors are
+    surfaced as error strings (improvements to error labeling will be handled in a later step).
+    """
     try:
+        # Stage 1: fetch profile from the LinkedIn URL
         profile = await fetch_linkedin_profile(payload.linkedin_url)
         name = profile.get("name") or profile.get("full_name") or ""
         company = profile.get("company") or ""
 
+        # Stage 2: find candidate email
         email_result = await find_email(name, company)
+
+        # Stage 3: generate draft via LLM
         draft = await generate_email(profile, payload.resume_text, payload.context, payload.tone)
 
+        # Stage 4: optional send
         send_result = None
         if payload.send:
             # Ensure we have an email to send
