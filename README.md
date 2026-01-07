@@ -1,2 +1,0 @@
-# 
-NetMind Models
