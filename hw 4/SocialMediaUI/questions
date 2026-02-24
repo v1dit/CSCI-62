@@ -1,0 +1,10 @@
+1. we store it so the vector can hold Post and LinkPost objects and use polymorphism correctly. 
+storing objects directly would also cause object slicing, which would prevent methods like toString() from working correctly.
+
+2. since it is private so it cannot be accessed. therefore, we need a public getter ( getMessage())
+
+3. the keyword is virtual, and it goes in the Post class method declaration. 
+this lets dynamic dispatch so the correct overridden method is called at runtime.
+
+4. 5-6 hrs
+
