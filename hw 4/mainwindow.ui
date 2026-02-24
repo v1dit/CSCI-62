@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="loginPage" native="true">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>10</y>
+      <width>561</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="promptLabel">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>30</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Enter your name:</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="nameInput">
+     <property name="geometry">
+      <rect>
+       <x>220</x>
+       <y>60</y>
+       <width>104</width>
+       <height>74</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="loginButton">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>140</y>
+       <width>161</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Login</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="profilePage" native="true">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>0</y>
+      <width>751</width>
+      <height>541</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="profileLabel">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>30</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>My Profile</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="friendsTable">
+     <property name="geometry">
+      <rect>
+       <x>560</x>
+       <y>410</y>
+       <width>131</width>
+       <height>91</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="postsLabel">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>50</y>
+       <width>611</width>
+       <height>351</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>postsLabel</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="backButton">
+     <property name="geometry">
+      <rect>
+       <x>560</x>
+       <y>500</y>
+       <width>141</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Back to My Profile</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="suggestionsTable">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>410</y>
+       <width>131</width>
+       <height>91</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="addFriendButton">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>500</y>
+       <width>111</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Friend</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="postInput">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>410</y>
+       <width>141</width>
+       <height>91</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="addPostButton">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>500</y>
+       <width>100</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Add Post</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="postsTable">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>410</y>
+       <width>141</width>
+       <height>91</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>37</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
