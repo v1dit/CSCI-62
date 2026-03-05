@@ -1,0 +1,6 @@
+breakpoint set --file problem1.cpp --line 15
+run < input17.txt
+bt
+frame variable auth_flag password
+continue
+quit
